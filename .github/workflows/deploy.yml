@@ -14,9 +14,9 @@ jobs:
         with:
           command: |
             cd /var/www/test.russellheimlich.com/htdocs
-            echo "Switching to ${BRANCH}"
+            echo "Switching to $BRANCH"
             git fetch
-            git checkout ${BRANCH}
+            git checkout $BRANCH
             git pull
             echo "Done!"
           host: ${{ secrets.SSH_HOST }}
