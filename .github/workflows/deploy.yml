@@ -13,19 +13,14 @@ jobs:
           echo ${{ env.GITHUB_BASE_REF_SLUG }}
           echo ${{ env.GITHUB_SHA_SHORT }}
       - name: SSH into host and update repo
-        env:
-          BRANCH: ${{ github.ref }}
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging'
+        if: ${{ env.GITHUB_REF_SLUG }} == 'master' || ${{ env.GITHUB_REF_SLUG }} == 'staging'
         uses: fifsky/ssh-action@master
         with:
           command: |
             cd /var/www/test.russellheimlich.com/htdocs
-            echo "Switching to $BRANCH"
-            echo "Switching to ${BRANCH}"
-            echo $BRANCH
-            echo ${{ github.ref }}
+            echo "Switching to ${{ env.GITHUB_REF_SLUG }}"
             git fetch
-            git checkout $BRANCH
+            git checkout ${{ env.GITHUB_REF_SLUG }}
             git pull
             echo "Done!"
           host: ${{ secrets.SSH_HOST }}
