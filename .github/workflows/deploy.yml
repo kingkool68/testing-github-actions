@@ -14,7 +14,10 @@ jobs:
         with:
           command: |
             cd /var/www/test.russellheimlich.com/htdocs
-            echo "Switching to $BRANCH"
+						echo "Switching to $BRANCH"
+						echo "Switching to ${BRANCH}"
+						echo $BRANCH
+						echo ${{ github.ref }}
             git fetch
             git checkout $BRANCH
             git pull
