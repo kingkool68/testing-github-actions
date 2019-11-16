@@ -4,16 +4,14 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - name: Run a one-line script
-     uses: fifsky/ssh-action@master
-     with:
-       command: |
-        cd /tmp
-        ls -a
-      host: ${{ secrets.SSH_HOST }}
-      user: deploy
-      key: ${{ secrets.SSH_PRIVATE_KEY}}
+      - name: Run a one-line script
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            cd /tmp
+            ls -a
+          host: ${{ secrets.SSH_HOST }}
+          user: deploy
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
