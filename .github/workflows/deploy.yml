@@ -15,5 +15,5 @@ jobs:
         cd /tmp
         ls -a
       host: ${{ secrets.SSH_HOST }}
-      user: ${{ secrets.SSH_USER }}
+      user: deploy
       key: ${{ secrets.SSH_PRIVATE_KEY}}
