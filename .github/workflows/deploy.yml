@@ -2,26 +2,20 @@ name: Deploy
 on: [push]
 
 env:
-  BRANCH: ${{ github.ref }}
+  BRANCH: ${GITHUB_REF##*/}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJson(job) }}
-        run: echo "$JOB_CONTEXT"
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$STEPS_CONTEXT"
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
       - name: SSH into host and update repo
-        # if: github.ref == 'master' || github.ref == 'staging'
+        env:
+          BRANCH: ${{ github.ref }}
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging'
         uses: fifsky/ssh-action@master
         with:
           command: |
