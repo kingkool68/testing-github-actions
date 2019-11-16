@@ -7,10 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: SSH into host and update repo
+        if: github.ref == 'master' || github.ref == 'staging'
         uses: fifsky/ssh-action@master
         with:
           command: |
             cd /var/www/test.russellheimlich.com/htdocs
+            git checkout ${{ github.ref }}
             git pull
           host: ${{ secrets.SSH_HOST }}
           user: deploy
