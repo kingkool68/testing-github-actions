@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: SSH into host and update repo
-        if: github.ref == 'master' || github.ref == 'staging'
+        # if: github.ref == 'master' || github.ref == 'staging'
         uses: fifsky/ssh-action@master
         with:
           command: |
