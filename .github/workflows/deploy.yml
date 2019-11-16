@@ -13,7 +13,7 @@ jobs:
           echo ${{ env.GITHUB_BASE_REF_SLUG }}
           echo ${{ env.GITHUB_SHA_SHORT }}
       - name: SSH into host and update repo
-        if: ${{ env.GITHUB_REF_SLUG }} == 'master' || ${{ env.GITHUB_REF_SLUG }} == 'staging'
+        if: GITHUB_REF_SLUG == 'master' || GITHUB_REF_SLUG == 'staging'
         uses: fifsky/ssh-action@master
         with:
           command: |
