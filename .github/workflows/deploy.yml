@@ -9,10 +9,13 @@ jobs:
       - name: SSH into host and update repo
         if: github.ref == 'master' || github.ref == 'staging'
         uses: fifsky/ssh-action@master
+        env :
+          BRANCH: ${{ github.ref }}
         with:
           command: |
             cd /var/www/test.russellheimlich.com/htdocs
-            git checkout ${{ github.ref }}
+            echo "Switching to ${BRANCH}""
+            git checkout ${BRANCH}
             git pull
           host: ${{ secrets.SSH_HOST }}
           user: deploy
