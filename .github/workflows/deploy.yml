@@ -1,17 +1,17 @@
 name: Deploy
 on: [push]
 
-env:
-  BRANCH: ${GITHUB_REF##*/}
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
+      - uses: rlespinasse/github-slug-action@master
+      - name: Print slug variables
+        run: |
+          echo ${{ env.GITHUB_REF_SLUG }}
+          echo ${{ env.GITHUB_HEAD_REF_SLUG }}
+          echo ${{ env.GITHUB_BASE_REF_SLUG }}
+          echo ${{ env.GITHUB_SHA_SHORT }}
       - name: SSH into host and update repo
         env:
           BRANCH: ${{ github.ref }}
