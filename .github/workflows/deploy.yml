@@ -1,6 +1,8 @@
 name: Deploy
-
 on: [push]
+
+env:
+  BRANCH: ${{ github.ref }}
 
 jobs:
   build:
@@ -12,8 +14,11 @@ jobs:
         with:
           command: |
             cd /var/www/test.russellheimlich.com/htdocs
-            git checkout ${{ github.ref }}
+            echo "Switching to ${BRANCH}"
+            git fetch
+            git checkout ${BRANCH}
             git pull
+            echo "Done!"
           host: ${{ secrets.SSH_HOST }}
           user: deploy
           key: ${{ secrets.SSH_PRIVATE_KEY }}
