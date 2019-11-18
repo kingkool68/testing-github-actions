@@ -5,15 +5,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: rlespinasse/github-slug-action@master
-      - name: Print slug variables
-        run: |
-          echo ${{ env.GITHUB_REF_SLUG }}
-          echo ${{ env.GITHUB_HEAD_REF_SLUG }}
-          echo ${{ env.GITHUB_BASE_REF_SLUG }}
-          echo ${{ env.GITHUB_SHA_SHORT }}
       - name: SSH into host and update repo
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging'
+        uses: rlespinasse/github-slug-action@master
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -21,7 +15,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/test.russellheimlich.com/htdocs
-            # BRANCH = ${GITHUB_REF##*/}
             echo "Switching to ${{ env.GITHUB_REF_SLUG }}"
             git fetch
             git checkout ${{ env.GITHUB_REF_SLUG }}
