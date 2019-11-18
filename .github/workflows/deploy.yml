@@ -21,10 +21,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/test.russellheimlich.com/htdocs
-            echo ${{ env.GITHUB_REF_SLUG }}
-            BRANCH = ${GITHUB_REF##*/}
-            echo "Switching to ${BRANCH}"
+            # BRANCH = ${GITHUB_REF##*/}
+            echo "Switching to ${{ env.GITHUB_REF_SLUG }}"
             git fetch
-            git checkout ${BRANCH}
+            git checkout ${{ env.GITHUB_REF_SLUG }}
             git pull
             echo "Done!"
