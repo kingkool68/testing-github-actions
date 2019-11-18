@@ -13,16 +13,17 @@ jobs:
           echo ${{ env.GITHUB_BASE_REF_SLUG }}
           echo ${{ env.GITHUB_SHA_SHORT }}
       - name: SSH into host and update repo
-        if: $GITHUB_REF_SLUG == 'master' || $GITHUB_REF_SLUG == 'staging'
-        uses: fifsky/ssh-action@master
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging'
+        uses: appleboy/ssh-action@master
         with:
-          command: |
+          host: ${{ secrets.SSH_HOST }}
+          username: deploy
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
             cd /var/www/test.russellheimlich.com/htdocs
-            echo "Switching to ${{ env.GITHUB_REF_SLUG }}"
+						BRANCH = ${GITHUB_REF##*/}
+            echo "Switching to ${BRANCH}"
             git fetch
-            git checkout ${{ env.GITHUB_REF_SLUG }}
+            git checkout ${BRANCH}
             git pull
             echo "Done!"
-          host: ${{ secrets.SSH_HOST }}
-          user: deploy
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
