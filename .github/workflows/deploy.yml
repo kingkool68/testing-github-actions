@@ -5,9 +5,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: rlespinasse/github-slug-action@master
       - name: SSH into host and update repo
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging'
-        uses: rlespinasse/github-slug-action@master
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
