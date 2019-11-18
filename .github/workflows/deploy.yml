@@ -16,7 +16,7 @@ jobs:
           script: |
             cd /var/www/test.russellheimlich.com/htdocs
             echo "Switching to ${{ env.GITHUB_REF_SLUG }}"
-            git fetch
             git checkout ${{ env.GITHUB_REF_SLUG }}
-            git pull
+            git fetch
+            git reset --hard origin/${{ env.GITHUB_REF_SLUG }}
             echo "Done!"
