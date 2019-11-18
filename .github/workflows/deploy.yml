@@ -1,24 +1,22 @@
 name: Deploy
 on: [push]
 
-env:
-  BRANCH: ${{ github.ref }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: rlespinasse/github-slug-action@master
       - name: SSH into host and update repo
-        if: github.ref == 'master' || github.ref == 'staging'
-        uses: fifsky/ssh-action@master
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging'
+        uses: appleboy/ssh-action@master
         with:
-          command: |
+          host: ${{ secrets.SSH_HOST }}
+          username: deploy
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
             cd /var/www/test.russellheimlich.com/htdocs
-            echo "Switching to ${BRANCH}"
+            echo "Switching to ${{ env.GITHUB_REF_SLUG }}"
             git fetch
-            git checkout ${BRANCH}
+            git checkout ${{ env.GITHUB_REF_SLUG }}
             git pull
             echo "Done!"
-          host: ${{ secrets.SSH_HOST }}
-          user: deploy
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
