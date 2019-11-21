@@ -73,3 +73,18 @@ jobs:
             git fetch
             git reset --hard origin/${{ env.GITHUB_REF_SLUG }}
 ```
+
+## Creating a Deployment Specific User
+When deploying code automatically from server to server its a good idea to use a dedicated system user on the remote server that is fairly locked down in what they can do. I followed along with this guide for creating a `deploy` user https://mikeeverhart.net/2016/02/add-a-deploy-user-to-a-remote-linux-server/
+
+The one tweak I would make is I would add `sudo usermod -g www-data deploy` so the `deploy` user's primary group is `www-data`, the same group the web server uses to read the files. This means when you deploy changes to your server they will be added to the same group as the web server user that reads the files. This also means you need to change permissions from the reccomended `755` to `775` for directories and from `644` to `664` for files. `775` allows the directory owner and users in the same group as the directory owner to read, write, and execute while others can only read and execute. See https://chmodcommand.com/chmod-775/ `664` allows read and write permissions for the file owner and the users in the same group as the file owner while others can only read the file. See https://chmodcommand.com/chmod-664/
+
+Here's a small script to recursivly set the permissions correctly:
+
+```
+# Set all directories permissions to 775
+find . -type d -exec chmod 775 {} \;
+
+# Set all files permissions to 664
+find . -type f -exec chmod 664 {} \;
+```
