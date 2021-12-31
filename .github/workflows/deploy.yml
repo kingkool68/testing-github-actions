@@ -1,22 +1,28 @@
-name: Deploy
-on: [push]
+name: Cache Deploy
+on:
+  push:
+    branches:
+    - 'actions/cache'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: rlespinasse/github-slug-action@v3.x
-      - name: SSH into host and update repo
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging'
-        uses: appleboy/ssh-action@master
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: deploy
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd /var/www/test.russellheimlich.com/htdocs
-            echo "Switching to ${{ env.GITHUB_REF_SLUG }}"
-            git checkout ${{ env.GITHUB_REF_SLUG }}
-            git fetch
-            git reset --hard origin/${{ env.GITHUB_REF_SLUG }}
-            echo "Done!"
+          node-version: '17'
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci --ignore-scripts
