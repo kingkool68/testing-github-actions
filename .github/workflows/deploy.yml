@@ -63,7 +63,7 @@ jobs:
           GITHUB_ACTION_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}/checks"
 
           # Switch branches... maybe?
-          if [ ! `git branch -r --list origin/${BUILD_BRANCH}` ]; then
+          if [ ! `git branch -r --list origin/$BUILD_BRANCH` ]; then
             # Branch doesn't exist. Create it and check it out.
             git checkout --orphan ${BUILD_BRANCH}
             git rm -rf .
