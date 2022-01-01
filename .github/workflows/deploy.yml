@@ -54,6 +54,7 @@ jobs:
 
       - name: Commit changes
         run: |
+          rm .gitignore
           git checkout -B ${GITHUB_REF_NAME}-build
           git add -A
           git commit -m "CI/CD"
