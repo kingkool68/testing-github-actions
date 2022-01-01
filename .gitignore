@@ -1,4 +1,4 @@
 node_modules
 assets/css
-assets/js
+assets/js/*.js
 !assets/js/*.src.js

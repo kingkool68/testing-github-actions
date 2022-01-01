@@ -1,1 +1,0 @@
-"use strict";!function(){var e;e=function(){console.log("hello world!")},"undefined"!=typeof document&&("complete"===document.readyState||"interactive"===document.readyState?e():document.addEventListener("DOMContentLoaded",e))}();
