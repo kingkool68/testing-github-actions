@@ -56,7 +56,7 @@ jobs:
         run: |
           rm .gitignore
           git add -A
-          git commit
+          git commit -m "Build"
 
           # Setup variables
           BUILD_BRANCH="${GITHUB_REF_NAME}-build"
