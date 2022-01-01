@@ -38,6 +38,9 @@ jobs:
       - name: Compile CSS
         run: npm run styles
 
+      - name: Compile JavaScript
+        run: npm run customJS
+
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
