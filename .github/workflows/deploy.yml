@@ -56,5 +56,5 @@ jobs:
         run: |
           rm .gitignore
           git checkout -B ${GITHUB_REF_NAME}-build
-          git merge --no-ff --squash -X ours ${GITHUB_REF_NAME}
+          git merge --squash -X ours ${GITHUB_REF_NAME}
           git push origin ${GITHUB_REF_NAME}-build --force
