@@ -7,7 +7,7 @@
 </head>
 
 <body>
-	<h1>Hello World!</h1>
+	<h1>It works!</h1>
 	<p>Seeing how caching dependencies works.</p>
 </body>
 </html>
