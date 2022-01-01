@@ -49,7 +49,7 @@ jobs:
 
       - name: Commit changes
         run: |
-          git checkout -B ${{ env.GITHUB_REF_SLUG }}-build
+          git checkout -B ${{ env.GITHUB_REF_NAME }}-build
           git add -A
           git commit -m "CI/CD"
-          git push origin ${{ env.GITHUB_REF_SLUG }}-build --force
+          git push origin ${{ env.GITHUB_REF_NAME }}-build --force
