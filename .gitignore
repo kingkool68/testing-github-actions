@@ -1,2 +1,4 @@
 node_modules
 assets/css
+assets/js
+!assets/js/*.src.js
