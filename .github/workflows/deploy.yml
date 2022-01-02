@@ -73,6 +73,11 @@ jobs:
             git checkout ${BUILD_BRANCH}
           fi
 
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "NOTICE: No changes to deploy"
+            exit 0
+          fi
+
           # Merge in our changes
           git merge --squash -X ours ${GITHUB_REF_NAME} --allow-unrelated-histories
           git commit -m "Merged ${GITHUB_SHA} from ${GITHUB_REF_NAME}" -m "${GITHUB_ACTION_URL}"
