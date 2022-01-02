@@ -55,6 +55,7 @@ jobs:
       - name: Commit changes
         run: |
           rm .gitignore
+          mv .gitignore-build .gitignore
           git add -A
           git commit -m "Build"
 
