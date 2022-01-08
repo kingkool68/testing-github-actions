@@ -74,7 +74,7 @@ jobs:
             git checkout ${BUILD_BRANCH}
           fi
 
-          git fetch -all
+          git fetch --all
           git reset origin/${GITHUB_REF_NAME}
 
           # if [ -z "$(git status --porcelain)" ]; then
