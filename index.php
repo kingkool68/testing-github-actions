@@ -7,7 +7,7 @@
 </head>
 
 <body>
-	<h1>It works! Maybe.</h1>
+	<h1>It works! 2022-01-07</h1>
 	<p>Seeing how caching dependencies works.</p>
 </body>
 </html>
