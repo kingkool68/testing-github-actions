@@ -4,6 +4,11 @@
 @import 'components/_reset.scss';
 @import 'components/_general.scss';
 
+body {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
 h1 {
     color: green;
 }
