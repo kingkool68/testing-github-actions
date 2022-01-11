@@ -1,0 +1,17 @@
+// Reduce content shift. See https://twitter.com/TimVereecke/status/1239454788116533248
+html {
+	overflow-y: scroll;
+	scroll-behavior: smooth;
+}
+body {
+	color: $gray-65;
+}
+
+a {
+	color: $black;
+
+	&:hover,
+	&focus {
+		text-decoration: underline;
+	}
+}

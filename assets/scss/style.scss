@@ -1,0 +1,13 @@
+@import 'base/_functions.scss';
+@import 'base/_colors.scss';
+
+@import 'components/_reset.scss';
+@import 'components/_general.scss';
+
+h1 {
+    color: green;
+}
+
+p {
+    font-size: 16px;
+}
