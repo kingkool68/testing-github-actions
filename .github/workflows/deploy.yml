@@ -90,6 +90,7 @@ jobs:
           cat >>~/.ssh/config <<END
           Host staging
             HostName $SSH_HOST
+            Port 22
             User $SSH_USER
             IdentityFile ~/.ssh/staging.key
             StrictHostKeyChecking no
