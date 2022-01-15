@@ -48,10 +48,6 @@ jobs:
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}+github-actions[bot]@users.noreply.github.com"
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
-
       - name: Commit changes
         run: |
           rm .gitignore
@@ -85,13 +81,8 @@ jobs:
           git commit -m "Merged ${GITHUB_SHA} from ${GITHUB_REF_NAME}" -m "${GITHUB_ACTION_URL}"
           git push origin ${BUILD_BRANCH} --force
 
-  deploy:
-    name: "Deploy"
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
-    needs: build
-    steps:
       - name: Configure SSH
+        if: ${{ github.ref == 'refs/heads/master' }}
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_KEY" > ~/.ssh/staging.key
@@ -108,5 +99,10 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
+
       - name: SSH Test
+        if: github.ref == 'refs/heads/master'
         run: ssh staging 'pwd'
