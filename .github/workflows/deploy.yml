@@ -99,10 +99,11 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
-
       - name: SSH Test
         if: github.ref == 'refs/heads/master'
         run: ssh staging 'pwd'
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        # if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
+        if: ${{ failure() }}
