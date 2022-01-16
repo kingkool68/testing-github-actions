@@ -105,9 +105,9 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
-      - name: SSH Test
+      - name: Deploy
         if: github.ref == 'refs/heads/master'
-        run: ssh staging 'pwd'
+        run: ssh staging
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
