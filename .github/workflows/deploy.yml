@@ -73,6 +73,11 @@ jobs:
           # Capture diff of the changes between the two branches
           git diff --no-color ${BUILD_BRANCH} ${GITHUB_REF_NAME} > ~/${BUILD_BRANCH}.diff
 
+          # If the diff is empty then bail
+          if ![ -s ~/${BUILD_BRANCH}.diff ]; then
+            exit 0;
+          fi
+
           # Apply changes to the build branch
           git apply ~/${BUILD_BRANCH}.diff
 
