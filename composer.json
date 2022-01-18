@@ -1,0 +1,29 @@
+{
+	"name": "kingkool68/testing-github-actions",
+	"description": "Testing some PHP dependencies",
+	"require": {
+		"php": "^7.4||^8.0",
+		"symfony/yaml": "^5.2",
+		"google/apiclient": "^2.0"
+	},
+	"require-dev": {
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"squizlabs/php_codesniffer": "^3.5",
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+		"wp-coding-standards/wpcs": "^2.3",
+		"php-stubs/wordpress-stubs": "^5.5"
+	},
+	"scripts": {
+		"pre-autoload-dump": "Google\\Task\\Composer::cleanup"
+	},
+	"extra": {
+		"google/apiclient-services": [
+			"Oauth2"
+		]
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
+}
