@@ -1,9 +1,8 @@
-name: Cache Deploy
+name: Deploy
 on:
   push:
     branches:
-    - 'master'
-    - 'actions/cache'
+    - 'main'
 
   workflow_dispatch:
     inputs:
@@ -16,48 +15,33 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      CI: true
       DISABLE_NOTIFIER: true
+    permissions:
+      contents: write
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '17'
+          node-version: '22'
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.0'
-
-      - name: Cache Composer dependencies
-        id: composer-cache
-        uses: actions/cache@v4
-        with:
-          path: ./vendor
-          key: composer-${{ hashFiles('composer.lock') }}
-
-      - name: Install Composer dependencies
-        if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: composer install --no-dev --no-progress --no-interaction
-
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: ./node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
+      - name: Delete the postinstall script
+        # Otherwise it enter the watch task and never finishes
+        run: npm pkg delete scripts.postinstall
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci --ignore-scripts
+        run: npm ci --no-audit --fund=false
 
       - name: Compile CSS
         run: npm run styles
 
       - name: Compile JavaScript
-        run: npm run customJS
+        run: npm run scripts
 
       - name: Configure git
         run: |
@@ -72,14 +56,14 @@ jobs:
           git commit -m "Build"
 
           # Setup variables
-          BUILD_BRANCH="${GITHUB_REF_NAME}-build"
+          BUILD_BRANCH="build/${GITHUB_REF_NAME}"
           GITHUB_ACTION_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}/checks"
 
           # Switch branches... maybe?
-          git fetch --all
           if [ ! `git branch -r --list origin/$BUILD_BRANCH` ]; then
             # Branch doesn't exist. Create it and check it out.
-            git checkout --orphan ${BUILD_BRANCH}
+            git branch -D "${BUILD_BRANCH}" || true
+            git checkout --orphan "${BUILD_BRANCH}"
             git rm -rf .
             git commit --allow-empty -m "Initial Commit"
           else
@@ -87,12 +71,11 @@ jobs:
           fi
 
           # Capture diff of the changes between the two branches
-          git diff --no-color ${BUILD_BRANCH} ${GITHUB_REF_NAME} > ~/${BUILD_BRANCH}.diff
+          git diff --no-color --binary ${BUILD_BRANCH} ${GITHUB_REF_NAME} > ~/the.diff
 
-          # If the diff file is not empty then continue
-          if [ -s ~/${BUILD_BRANCH}.diff ]; then
-            # Apply changes to the build branch
-            git apply ~/${BUILD_BRANCH}.diff
+          # If there are changes, apply & push
+          if [ -s ~/the.diff ]; then
+            git apply ~/the.diff
 
             # Add file changes and commit
             git add .
@@ -129,7 +112,3 @@ jobs:
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
-
-      - name: Setup tmate session (failure)
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ failure() }}
